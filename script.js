@@ -1,6 +1,7 @@
 var playerX = "X";
 var playerO = "O";
-var gameBoard = ['', '', '', '', '', '', '', '', ''];
+var isGameOver = false;
+var gameBoard = ["", "", "", "", "", "", "", "", ""];
 var currentPlayer = selectRandomPlayer();
 var allButtons = document.querySelectorAll(".button");
 var winningComb = [
@@ -26,18 +27,15 @@ function handleButtonClick(button) {
 }
 
 function gameRunning(index) {
-  if (isGameOver() || isBoardFull() ){
-    console.log("GameOver!");
+  while (!isGameOver) {
+    playMove(index);
+    if (checkWinner()) {
+      console.log(`Player ${currentPlayer} wins!`);
+    } else {
+      getOtherPlayer();
+    }
   }
-  playMove(index);
-  if (checkWinner()) {
-    console.log(`Player ${currentPlayer} wins!`);
-  }
-  if (isBoardFull()) {
-    console.log("It's a draw!");
-  } else {
-    getOtherPlayer();
-  }
+  console.log("GameOver!");
 }
 
 function selectRandomPlayer() {
@@ -45,23 +43,21 @@ function selectRandomPlayer() {
 }
 
 function getOtherPlayer() {
-    currentPlayer = currentPlayer === playerX ? playerO : playerX;
-  }
-  
+  currentPlayer = currentPlayer === playerX ? playerO : playerX;
+}
+
 function playMove(index) {
   gameBoard[index] = currentPlayer;
   allButtons[index].innerText = currentPlayer;
 }
 
-function isGameOver() {
-  return checkWinner() || isBoardFull();
+function isBoardFull() {
+  if (gameBoard.every((index) => gameBoard[index] !== "")) {
+    isGameOver = true;
+  }
 }
 
-function isBoardFull() {
-    return gameBoard.every(index => gameBoard[index] !== '');
-  }
-
 function resetGame() {
-  gameBoard = ['', '', '', '', '', '', '', '', ''];
+  gameBoard = ["", "", "", "", "", "", "", "", ""];
   currentPlayer = selectRandomPlayer();
 }
