@@ -69,18 +69,22 @@ body {
 }
 
 #restartBtn {
-  background-color: var(--btn-color);
+  background-color: var(--main-color3);
   color: var(--main-color2);
+  box-shadow: 0 0 15px var(--box-shadow-color);
+  font-size: 30px;
+  margin-top: 60px;
   border: none;
   border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 2px;
+  padding: 30px 40px;
   width: 100%;
   transition: 0.3s;
 }
 
-#restartBtn{
-
+#restartBtn:hover {
+  background-color: var(--main-color2);
+  color: var(--main-color3);
 }
