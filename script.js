@@ -1,10 +1,11 @@
-var playerX = "X";
-var playerO = "O";
-var isGameOver = false;
-var gameBoard = ["", "", "", "", "", "", "", "", ""];
-var currentPlayer = selectRandomPlayer();
-var allButtons = document.querySelectorAll(".button");
-var winningComb = [
+let playerX = "X";
+let playerO = "O";
+let isGameOver = false;
+let gameBoard = ["", "", "", "", "", "", "", "", ""];
+let currentPlayer = selectRandomPlayer();
+let allButtons = document.querySelectorAll(".button");
+let restartButton = document.getElementById("restartBtn");
+let winningComb = [
   [0, 1, 2],
   [3, 4, 5],
   [6, 7, 8],
@@ -15,27 +16,36 @@ var winningComb = [
   [2, 5, 8],
 ];
 
-allButtons.forEach(function (button) {
+allButtons.forEach((button) => {
   button.addEventListener("click", function () {
     handleButtonClick(button);
   });
 });
 
+restartButton.addEventListener("click", function () {
+  resetGame();
+});
+
 function handleButtonClick(button) {
-  var index = Array.from(allButtons).indexOf(button);
+  let index = Array.from(allButtons).indexOf(button);
+
+  if (gameBoard[index] !== "" || isGameOver) {
+    return;
+  }
   gameRunning(index);
 }
 
 function gameRunning(index) {
-  while (!isGameOver) {
-    playMove(index);
-    if (checkWinner()) {
-      console.log(`Player ${currentPlayer} wins!`);
-    } else {
-      getOtherPlayer();
-    }
+  playMove(index);
+  if (checkWinner()) {
+    console.log(`Player ${currentPlayer} wins!`);
+    isGameOver = true;
+  } else if (isBoardFull()) {
+    console.log("GameOver!");
+    isGameOver = true;
+  } else {
+    getOtherPlayer();
   }
-  console.log("GameOver!");
 }
 
 function selectRandomPlayer() {
@@ -52,12 +62,32 @@ function playMove(index) {
 }
 
 function isBoardFull() {
-  if (gameBoard.every((index) => gameBoard[index] !== "")) {
-    isGameOver = true;
+  if (gameBoard.every((value) => value !== "")) {
+    return true;
   }
+  return false;
 }
 
 function resetGame() {
   gameBoard = ["", "", "", "", "", "", "", "", ""];
+  allButtons.forEach((button) => {
+    button.innerText = "";
+  });
+
   currentPlayer = selectRandomPlayer();
+  isGameOver = false;
+}
+
+function checkWinner() {
+  for (let i = 0; i < winningComb.length; i++) {
+    const [a, b, c] = winningComb[i];
+    if (
+      gameBoard[a] &&
+      gameBoard[a] === gameBoard[b] &&
+      gameBoard[a] === gameBoard[c]
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
